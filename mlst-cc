@@ -1,0 +1,53 @@
+#!/usr/bin/env python
+
+import argparse
+import csv
+
+# Usage
+import argparse
+parser = argparse.ArgumentParser(
+		prog='mlst-cc', 
+		formatter_class=argparse.RawDescriptionHelpFormatter,
+		description='Identifies clonal complexes (CC) based on shared MLST alleles',
+		usage='\n  %(prog)s [profile] > clonal-complexes.txt')
+parser.add_argument('file', metavar='profile', nargs=1, help='Tab-separated file with MLST alleles')
+parser.add_argument('--shared', metavar='shared', nargs=1, default=6, help='Number of shared MLST alleles to define clonal complex (default = 6)')
+parser.add_argument('--version', action='version', version='%(prog)s version 0.1\nUpdated 16-Jul-2015\nScript by JK')
+args = parser.parse_args()
+
+# Compare ST alleles
+x = ''.join(str(args.shared))
+y = int(x) - 1
+alleles = ''.join(args.file)
+profiles = list(csv.reader(open(alleles, 'r'), delimiter='\t'))
+del profiles[0]
+for row in profiles:
+	ST = 'ST' + str(row[0])
+	a = row[1]
+	b = row[2]
+	c = row[3]
+	d = row[4]
+	e = row[5]
+	f = row[6]
+	g = row[7]
+	compST = []
+	compST.append(ST)
+	for row in profiles:
+		sum = 0
+		if row[1] == a:
+			sum = sum + 1
+		if row[2] == b:
+			sum = sum + 1
+		if row[3] == c:
+			sum = sum + 1
+		if row[4] == d:
+			sum = sum + 1
+		if row[5] == e:
+			sum = sum + 1
+		if row[6] == f:
+			sum = sum + 1
+		if row[7] == g:
+			sum = sum + 1
+		if sum > y:
+			compST.append(row[0])
+	print('\t'.join(map(str,compST)))
