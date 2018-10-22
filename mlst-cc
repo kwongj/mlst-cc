@@ -1,7 +1,23 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import argparse
 import csv
+import sys
+import os
+import glob
+
+# Functions
+def msg(*args, **kwargs):
+	print(*args, file=sys.stderr, **kwargs)
+
+def err(*args, **kwargs):
+	msg(*args, **kwargs)
+	sys.exit(1);
+
+def check_file(f):
+	msg('Checking file: {}'.format(f))
+	if os.path.isfile(f) == False:
+		err('ERROR: Cannot find "{}". Check output files exist in this directory.'.format(f))
 
 # Usage
 import argparse
@@ -10,16 +26,33 @@ parser = argparse.ArgumentParser(
 		formatter_class=argparse.RawDescriptionHelpFormatter,
 		description='Identifies clonal complexes (CC) based on shared MLST alleles',
 		usage='\n  %(prog)s [profile] > clonal-complexes.txt')
-parser.add_argument('file', metavar='profile', nargs=1, help='Tab-separated file with MLST alleles')
-parser.add_argument('--shared', metavar='shared', nargs=1, default=6, help='Number of shared MLST alleles to define clonal complex (default = 6)')
+parser.add_argument('--db', metavar='db', default='/home/tseemann/git/mlst/db/pubmlst/', help='Path to db (default = /home/tseemann/git/mlst/db/pubmlst)')
+parser.add_argument('--scheme', metavar='scheme', nargs=1, help='MLST scheme')
+parser.add_argument('--list', action='store_true', help='List MLST schemes available')
+parser.add_argument('--shared', metavar='shared', default=6, help='Number of shared MLST alleles to define clonal complex (default = 6)')
 parser.add_argument('--version', action='version', version='%(prog)s version 0.1\nUpdated 16-Jul-2015\nScript by JK')
 args = parser.parse_args()
 
+# Create a scheme list to print
+if args.list:
+	scheme_list = []
+	for file in glob.iglob(os.path.join(args.db, '**/*.txt'), recursive=True):
+		profile = os.path.basename(file)
+		profile = os.path.splitext(profile)[0]
+		scheme_list.append(profile)
+	print(*scheme_list)
+	sys.exit(0)
+
+# Check if scheme is specified, else return error
+if not args.scheme:
+	err('ERROR: Please specify a MLST scheme with --scheme.')
+
 # Compare ST alleles
-x = ''.join(str(args.shared))
-y = int(x) - 1
-alleles = ''.join(args.file)
-profiles = list(csv.reader(open(alleles, 'r'), delimiter='\t'))
+x = int(args.shared)
+y = x - 1
+scheme_txt = os.path.join('**', args.scheme[0]+'.txt')
+scheme_file = glob.glob(os.path.join(args.db, scheme_txt), recursive=True)
+profiles = list(csv.reader(open(scheme_file[0], 'r'), delimiter='\t'))
 del profiles[0]
 for row in profiles:
 	ST = 'ST' + str(row[0])
