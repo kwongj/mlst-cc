@@ -25,12 +25,12 @@ parser = argparse.ArgumentParser(
 		prog='mlst-cc', 
 		formatter_class=argparse.RawDescriptionHelpFormatter,
 		description='Identifies clonal complexes (CC) based on shared MLST alleles',
-		usage='\n  %(prog)s [profile] > clonal-complexes.txt')
+		usage='\n  %(prog)s --scheme [scheme] > clonal-complexes.txt')
 parser.add_argument('--db', metavar='db', default='/home/tseemann/git/mlst/db/pubmlst/', help='Path to db (default = /home/tseemann/git/mlst/db/pubmlst)')
 parser.add_argument('--scheme', metavar='scheme', nargs=1, help='MLST scheme')
 parser.add_argument('--list', action='store_true', help='List MLST schemes available')
 parser.add_argument('--shared', metavar='shared', default=6, help='Number of shared MLST alleles to define clonal complex (default = 6)')
-parser.add_argument('--version', action='version', version='%(prog)s version 0.1\nUpdated 16-Jul-2015\nScript by JK')
+parser.add_argument('--version', action='version', version='%(prog)s v0.2')
 args = parser.parse_args()
 
 # Create a scheme list to print
