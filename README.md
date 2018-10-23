@@ -7,7 +7,7 @@ Jason Kwong (@kwongjc)
 
 ## Requirements
 * Python 3.x
-* (recommended) [mlst](https://github.com/tseemann/mlst)
+* (not required, but recommended) [mlst](https://github.com/tseemann/mlst)
 
 ## Usage
 
@@ -28,18 +28,18 @@ optional arguments:
   --version        show program's version number and exit
 ```
 
-For basic usage:
+**For basic usage:**
 ```
 mlst-cc --scheme kpneumoniae
 ```
 where `--scheme` specifies the MLST scheme.
 
-To see which PubMLST schemes are supported:
+**To see which PubMLST schemes are supported:**
 ```
 mlst-cc --list
 ```
 
-To change the location of the database directory:
+**To change the location of the database directory:**
 ```
 mlst-cc --db /path/to/dir
 ```
