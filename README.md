@@ -9,6 +9,13 @@ Jason Kwong (@kwongjc)
 * Python 3.x
 * (not required, but recommended) [mlst](https://github.com/tseemann/mlst)
 
+## To install
+```
+$ git clone https://github.com/kwongj/mlst-cc.git
+$ cd mlst-cc
+$ mlst-cc -h
+```
+
 ## Usage
 
 ```
